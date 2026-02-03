@@ -39,28 +39,39 @@
         #container {
             position: relative;
             background: rgba(255, 255, 255, 0.95);
-            padding: 3rem;
+            padding: 2.5rem;
             border-radius: 30px;
             box-shadow: 0 15px 35px rgba(211, 47, 47, 0.2);
             z-index: 10;
-            max-width: 500px;
+            max-width: 450px;
             width: 90%;
         }
 
-        h1 { color: #d32f2f; margin-bottom: 2rem; }
+        /* Your Photo Styling */
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%; /* Circular */
+            border: 5px solid #ff4081;
+            margin-bottom: 1rem;
+            box-shadow: 0 5px 15px rgba(255, 64, 129, 0.4);
+        }
+
+        h1 { color: #d32f2f; margin: 1rem 0; font-size: 2rem; }
 
         .btn-group {
             display: flex;
             justify-content: center;
             align-items: center;
             gap: 50px;
-            height: 150px;
+            height: 120px;
             position: relative;
         }
 
         button {
-            padding: 15px 40px;
-            font-size: 1.3rem;
+            padding: 12px 35px;
+            font-size: 1.2rem;
             font-weight: bold;
             border: none;
             border-radius: 50px;
@@ -80,10 +91,12 @@
         }
 
         #successMessage { display: none; }
+        
         .bouquet-img {
             max-width: 100%;
             border-radius: 20px;
             margin-top: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
     </style>
 </head>
@@ -96,7 +109,9 @@
             <img src="https://media.licdn.com/dms/image/v2/D4E03AQExvDe_SAXhMw/profile-displayphoto-shrink_800_800/B4EZPWSdS.HkAk-/0/1734466985563?e=1771459200&v=beta&t=BWw2uqgNL43MJ2V3kRKYHGL6nMbGZrpEC8bsyLhu0TE" 
                  alt="Devaki's Valentine" 
                  class="profile-img">
-            <h1>Devaki, will you be my Valentine? From Bunny :) ❤️</h1>
+            
+            <h1>Devaki, will you be my Valentine? ❤️</h1>
+            
             <div class="btn-group">
                 <button id="yesBtn">Yes!</button>
                 <button id="noBtn">No</button>
@@ -104,8 +119,7 @@
         </div>
 
         <div id="successMessage">
-            <h1>Yay!!! ❤️</h1>
-            <p>A bouquet is on its way!!!! My Little bug pookster pieeee!! :) </p>
+            <p>A bouquet is on its way!!!! My Little bug pookster pieeee!! :) </p> 
             <img class="bouquet-img" src="https://flowergiftkorea.com/wp-content/uploads/2016/05/ADB42A7F-D38F-4A75-80DE-6F10E4844B26.jpg" alt="Flowers">
         </div>
     </div>
@@ -116,23 +130,21 @@
         const askSection = document.getElementById('ask');
         const successSection = document.getElementById('successMessage');
 
-        // This makes the button dodge the cursor
+        // Dodge logic: Button moves away when cursor is near
         document.addEventListener('mousemove', (e) => {
             const btnRect = noBtn.getBoundingClientRect();
             const btnCenterX = btnRect.left + btnRect.width / 2;
             const btnCenterY = btnRect.top + btnRect.height / 2;
 
-            // Distance between cursor and button center
             const dx = e.clientX - btnCenterX;
             const dy = e.clientY - btnCenterY;
             const distance = Math.sqrt(dx * dx + dy * dy);
 
-            // If cursor is within 100px, push the button away
-            if (distance < 100) {
+            // If cursor is within 80px, push the button away
+            if (distance < 80) {
                 const angle = Math.atan2(dy, dx);
-                // Push it 120 pixels away from the cursor
-                const pushX = -Math.cos(angle) * 120;
-                const pushY = -Math.sin(angle) * 120;
+                const pushX = -Math.cos(angle) * 100;
+                const pushY = -Math.sin(angle) * 100;
 
                 noBtn.style.transform = `translate(${pushX}px, ${pushY}px)`;
             }
@@ -145,7 +157,7 @@
             document.body.style.backgroundColor = '#fce4ec';
         });
 
-        // Hearts
+        // Background Hearts
         function createHeart() {
             const heart = document.createElement('div');
             heart.classList.add('floating-heart');
