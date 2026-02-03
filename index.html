@@ -20,10 +20,8 @@
         /* Floating Hearts Container */
         .heart-bg {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             pointer-events: none;
             z-index: 0;
         }
@@ -53,17 +51,13 @@
             width: 90%;
         }
 
-        h1 {
-            color: #d32f2f;
-            margin-bottom: 2rem;
-            font-size: 2.5rem;
-        }
+        h1 { color: #d32f2f; margin-bottom: 2rem; font-size: 2.5rem; }
 
         .btn-group {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 40px; /* Clearly separates the two buttons */
+            gap: 40px;
             height: 100px;
         }
 
@@ -74,42 +68,29 @@
             border: none;
             border-radius: 50px;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: transform 0.2s;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
-        #yesBtn {
-            background-color: #ff4081;
-            color: white;
-        }
-
-        #yesBtn:hover {
-            transform: scale(1.1);
-            background-color: #f50057;
-        }
+        #yesBtn { background-color: #ff4081; color: white; }
+        #yesBtn:hover { transform: scale(1.1); background-color: #f50057; }
 
         #noBtn {
             background-color: #9e9e9e;
             color: white;
-            position: absolute; /* Allows it to float away */
-            transition: all 0.1s ease; /* Makes it look like it's darting away */
+            position: absolute; 
+            /* Transition is very fast so she can't catch it mid-move */
+            transition: all 0.15s ease-out; 
+            z-index: 999;
         }
 
-        #successMessage {
-            display: none;
-        }
-
+        #successMessage { display: none; }
         .bouquet-img {
             max-width: 100%;
             height: auto;
             border-radius: 20px;
             margin-top: 20px;
             box-shadow: 0 10px 20px rgba(0,0,0,0.15);
-        }
-
-        p {
-            font-size: 1.2rem;
-            color: #555;
         }
     </style>
 </head>
@@ -127,9 +108,9 @@
         </div>
 
         <div id="successMessage">
-            <h1>YAYY!! ❤️</h1>
-            <p>These Big Flowers are coming your way my forever Valentine!!!</p>
-            <img class="bouquet-img" src="https://hugebouquets.com/cdn/shop/files/1000-roses_e20d5ebd-5d1b-41da-b641-dbfd471b3245_800x.jpg?v=1713550331" alt="Bouquet">
+            <h1>I knew you'd say Yes! ❤️</h1>
+            <p>These are coming your way!! My little Pookie!</p>
+            <img class="bouquet-img" src="https://cdn.globalrose.com/assets/img/prod/roses-next-day-delivery-globalrose.png" alt="Bouquet of Roses">
         </div>
     </div>
 
@@ -138,24 +119,25 @@
         const yesBtn = document.getElementById('yesBtn');
         const askSection = document.getElementById('ask');
         const successSection = document.getElementById('successMessage');
-        const heartContainer = document.getElementById('heartContainer');
 
-        // Initial position setup for No button so it starts near Yes
-        window.onload = () => {
-            const rect = noBtn.getBoundingClientRect();
-            noBtn.style.left = rect.left + 'px';
-            noBtn.style.top = rect.top + 'px';
-        };
-
-        // The "Run Away" Logic
-        noBtn.addEventListener('mouseover', () => {
-            // Calculate a random spot that keeps the button on screen
-            const padding = 50;
-            const newX = Math.random() * (window.innerWidth - noBtn.offsetWidth - padding);
-            const newY = Math.random() * (window.innerHeight - noBtn.offsetHeight - padding);
+        // Function to move the button to a random spot on the screen
+        function moveButton() {
+            // Calculate random coordinates
+            // (Window width/height minus button size to keep it fully on screen)
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - 20);
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - 20);
             
-            noBtn.style.left = `${newX}px`;
-            noBtn.style.top = `${newY}px`;
+            noBtn.style.left = `${x}px`;
+            noBtn.style.top = `${y}px`;
+        }
+
+        // Trick #1: Move when mouse gets close (Desktop)
+        noBtn.addEventListener('mouseover', moveButton);
+
+        // Trick #2: Move when touched (Mobile/Tablet)
+        noBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault(); // Prevents the actual "click" from happening
+            moveButton();
         });
 
         // The "Yes" Logic
@@ -163,9 +145,7 @@
             askSection.style.display = 'none';
             successSection.style.display = 'block';
             document.body.style.backgroundColor = '#fce4ec';
-            
-            // Increase heart density for celebration
-            heartSpawnRate = 100; 
+            spawnCelebrateHearts();
         });
 
         // Floating Hearts Logic
@@ -176,13 +156,15 @@
             heart.style.left = Math.random() * 100 + 'vw';
             heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
             heart.style.animationDuration = (Math.random() * 3 + 3) + 's';
-            
-            heartContainer.appendChild(heart);
+            document.getElementById('heartContainer').appendChild(heart);
             setTimeout(() => { heart.remove(); }, 6000);
         }
 
-        let heartSpawnRate = 400;
-        setInterval(createHeart, heartSpawnRate);
+        setInterval(createHeart, 400);
+
+        function spawnCelebrateHearts() {
+            setInterval(createHeart, 100);
+        }
     </script>
 </body>
 </html>
